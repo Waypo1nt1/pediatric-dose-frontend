@@ -1,6 +1,6 @@
 import type { DrugDose } from '../types'
 
-const MEDIA_BASE_URL = 'http://localhost:9000/drug-dose-media'
+const MEDIA_BASE_URL = '/media'
 
 export const DEFAULT_IMAGE_URL = '/default-cover.png'
 export const DEFAULT_VIDEO_URL = '/default-video.mp4'
