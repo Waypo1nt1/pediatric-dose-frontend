@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-import { ADULT_DOSE_MAX, ADULT_DOSE_MIN } from '../modules/mock'
+import { ADULT_DOSE_MAX, ADULT_DOSE_MIN, ADULT_DOSE_SCALE } from '../modules/mock'
 
 interface DoseFilterProps {
     minAdultDose: number
@@ -52,6 +52,12 @@ const DoseFilter = ({ minAdultDose, maxAdultDose, onApply }: DoseFilterProps) =>
                     onChange={(event) => setMaxValue(Number(event.target.value))}
                 />
                 <span className="dose-slider-value">{maxValue}</span>
+            </div>
+
+            <div className="dose-slider-scale">
+                {ADULT_DOSE_SCALE.map((mark) => (
+                    <span className="dose-slider-mark" key={mark}>{mark}</span>
+                ))}
             </div>
 
             <Button className="dose-filter-button" type="submit">Найти</Button>

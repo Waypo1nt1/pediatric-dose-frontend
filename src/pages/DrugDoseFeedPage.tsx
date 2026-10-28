@@ -110,7 +110,7 @@ const DrugDoseFeedPage = () => {
                 </p>
 
                 <Button className="drug-description-toggle" variant="link" onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}>
-                    {isDescriptionOpen ? 'меньше' : 'больше'}
+                    {isDescriptionOpen ? 'свернуть' : 'ещё'}
                 </Button>
             </div>
         </div>

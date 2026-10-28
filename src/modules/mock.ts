@@ -98,3 +98,10 @@ export const DRUG_DOSES_MOCK: DrugDose[] = [
 
 export const ADULT_DOSE_MIN = 0
 export const ADULT_DOSE_MAX = 1000
+
+const ADULT_DOSE_SCALE_MARKS = 4
+
+export const ADULT_DOSE_SCALE = Array.from(
+    { length: ADULT_DOSE_SCALE_MARKS + 1 },
+    (_, index) => ADULT_DOSE_MIN + ((ADULT_DOSE_MAX - ADULT_DOSE_MIN) / ADULT_DOSE_SCALE_MARKS) * index,
+)
