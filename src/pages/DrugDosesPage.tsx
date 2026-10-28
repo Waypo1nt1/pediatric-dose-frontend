@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
-import { useSearchParams } from 'react-router-dom'
 import DoseFilter from '../components/DoseFilter'
 import DrugDoseTile from '../components/DrugDoseTile'
 import { ADULT_DOSE_MAX, ADULT_DOSE_MIN, DRUG_DOSES_MOCK } from '../modules/mock'
 import type { DrugDose } from '../types'
 
 const DrugDosesPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [minAdultDose, setMinAdultDose] = useState(ADULT_DOSE_MIN)
+    const [maxAdultDose, setMaxAdultDose] = useState(ADULT_DOSE_MAX)
     const [drugDoses, setDrugDoses] = useState<DrugDose[]>([])
     const [isLoading, setIsLoading] = useState(true)
-
-    const minAdultDose = Number(searchParams.get('min_adult_dose') ?? ADULT_DOSE_MIN)
-    const maxAdultDose = Number(searchParams.get('max_adult_dose') ?? ADULT_DOSE_MAX)
 
     useEffect(() => {
         setIsLoading(true)
@@ -36,10 +33,8 @@ const DrugDosesPage = () => {
     }, [])
 
     const handleApply = (nextMinAdultDose: number, nextMaxAdultDose: number) => {
-        setSearchParams({
-            min_adult_dose: String(nextMinAdultDose),
-            max_adult_dose: String(nextMaxAdultDose),
-        })
+        setMinAdultDose(nextMinAdultDose)
+        setMaxAdultDose(nextMaxAdultDose)
     }
 
     return (
