@@ -1,41 +1,17 @@
-import { useEffect, useState } from 'react'
-import { Spinner } from 'react-bootstrap'
+import { useEffect } from 'react'
 import DoseFilter from '../components/DoseFilter'
 import DrugDoseTile from '../components/DrugDoseTile'
-import { ADULT_DOSE_MAX, ADULT_DOSE_MIN, DRUG_DOSES_MOCK } from '../modules/mock'
-import type { DrugDose } from '../types'
+import { getDrugDosesList } from '../slices/drugDosesSlice'
+import { useAppDispatch, useAppSelector } from '../store'
 
 const DrugDosesPage = () => {
-    const [minAdultDose, setMinAdultDose] = useState(ADULT_DOSE_MIN)
-    const [maxAdultDose, setMaxAdultDose] = useState(ADULT_DOSE_MAX)
-    const [drugDoses, setDrugDoses] = useState<DrugDose[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        setIsLoading(true)
-
-        const timer = setTimeout(() => {
-            setDrugDoses(
-                DRUG_DOSES_MOCK.filter(
-                    (drugDose) =>
-                        drugDose.recommended_adult_dose_mg >= minAdultDose &&
-                        drugDose.recommended_adult_dose_mg <= maxAdultDose,
-                ),
-            )
-            setIsLoading(false)
-        }, 300)
-
-        return () => clearTimeout(timer)
-    }, [minAdultDose, maxAdultDose])
+    const dispatch = useAppDispatch()
+    const { drugDoses, loading, isMock } = useAppSelector((state) => state.drugDoses)
 
     useEffect(() => {
         document.title = 'Плитка доз препаратов'
-    }, [])
-
-    const handleApply = (nextMinAdultDose: number, nextMaxAdultDose: number) => {
-        setMinAdultDose(nextMinAdultDose)
-        setMaxAdultDose(nextMaxAdultDose)
-    }
+        dispatch(getDrugDosesList())
+    }, [dispatch])
 
     return (
         <div className="screen">
@@ -44,15 +20,11 @@ const DrugDosesPage = () => {
                 <p className="screen-subtitle">Рекомендованные дозировки для взрослых</p>
             </header>
 
-            <DoseFilter minAdultDose={minAdultDose} maxAdultDose={maxAdultDose} onApply={handleApply} />
+            <DoseFilter />
 
-            {isLoading && (
-                <div className="screen-loader">
-                    <Spinner animation="border" role="status" variant="primary" />
-                </div>
-            )}
+            {isMock && <p className="draft-message">Веб-сервис недоступен, показаны mock-объекты</p>}
 
-            {!isLoading && drugDoses.length > 0 && (
+            {!loading && drugDoses.length > 0 && (
                 <div className="drug-grid">
                     {drugDoses.map((drugDose) => (
                         <DrugDoseTile key={drugDose.id} drugDose={drugDose} />
@@ -60,7 +32,7 @@ const DrugDosesPage = () => {
                 </div>
             )}
 
-            {!isLoading && drugDoses.length === 0 && (
+            {!loading && drugDoses.length === 0 && (
                 <p className="empty-note">Дозы препаратов с такой дозировкой не найдены</p>
             )}
         </div>

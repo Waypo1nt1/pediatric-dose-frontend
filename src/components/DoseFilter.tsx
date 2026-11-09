@@ -1,25 +1,15 @@
-import { useEffect, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { ADULT_DOSE_MAX, ADULT_DOSE_MIN, ADULT_DOSE_SCALE } from '../modules/mock'
+import { getDrugDosesList, setMaxAdultDose, setMinAdultDose } from '../slices/drugDosesSlice'
+import { useAppDispatch, useAppSelector } from '../store'
 
-interface DoseFilterProps {
-    minAdultDose: number
-    maxAdultDose: number
-    onApply: (minAdultDose: number, maxAdultDose: number) => void
-}
-
-const DoseFilter = ({ minAdultDose, maxAdultDose, onApply }: DoseFilterProps) => {
-    const [minValue, setMinValue] = useState(minAdultDose)
-    const [maxValue, setMaxValue] = useState(maxAdultDose)
-
-    useEffect(() => {
-        setMinValue(minAdultDose)
-        setMaxValue(maxAdultDose)
-    }, [minAdultDose, maxAdultDose])
+const DoseFilter = () => {
+    const dispatch = useAppDispatch()
+    const { minAdultDose, maxAdultDose, loading } = useAppSelector((state) => state.drugDoses)
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        onApply(Math.min(minValue, maxValue), Math.max(minValue, maxValue))
+        dispatch(getDrugDosesList())
     }
 
     return (
@@ -34,10 +24,10 @@ const DoseFilter = ({ minAdultDose, maxAdultDose, onApply }: DoseFilterProps) =>
                     min={ADULT_DOSE_MIN}
                     max={ADULT_DOSE_MAX}
                     step={10}
-                    value={minValue}
-                    onChange={(event) => setMinValue(Number(event.target.value))}
+                    value={minAdultDose}
+                    onChange={(event) => dispatch(setMinAdultDose(Number(event.target.value)))}
                 />
-                <span className="dose-slider-value">{minValue}</span>
+                <span className="dose-slider-value">{minAdultDose}</span>
             </div>
 
             <div className="dose-slider-row">
@@ -48,10 +38,10 @@ const DoseFilter = ({ minAdultDose, maxAdultDose, onApply }: DoseFilterProps) =>
                     min={ADULT_DOSE_MIN}
                     max={ADULT_DOSE_MAX}
                     step={10}
-                    value={maxValue}
-                    onChange={(event) => setMaxValue(Number(event.target.value))}
+                    value={maxAdultDose}
+                    onChange={(event) => dispatch(setMaxAdultDose(Number(event.target.value)))}
                 />
-                <span className="dose-slider-value">{maxValue}</span>
+                <span className="dose-slider-value">{maxAdultDose}</span>
             </div>
 
             <div className="dose-slider-scale">
@@ -60,7 +50,7 @@ const DoseFilter = ({ minAdultDose, maxAdultDose, onApply }: DoseFilterProps) =>
                 ))}
             </div>
 
-            <Button className="dose-filter-button" type="submit">Найти</Button>
+            <Button className="dose-filter-button" type="submit" disabled={loading}>Найти</Button>
         </Form>
     )
 }

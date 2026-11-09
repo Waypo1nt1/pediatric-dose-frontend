@@ -1,15 +1,20 @@
 import { useState } from 'react'
-import { Card } from 'react-bootstrap'
+import { Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import type { SchemesDrugDose } from '../api/Api'
+import { mediaUrl } from '../modules/media'
 import { DEFAULT_IMAGE_URL } from '../modules/mock'
-import type { DrugDose } from '../types'
+import { deleteDrugDose } from '../slices/drugDosesSlice'
+import { useAppDispatch, useAppSelector } from '../store'
 
 interface DrugDoseTileProps {
-    drugDose: DrugDose
+    drugDose: SchemesDrugDose
 }
 
 const DrugDoseTile = ({ drugDose }: DrugDoseTileProps) => {
-    const [imageUrl, setImageUrl] = useState(drugDose.image_url || DEFAULT_IMAGE_URL)
+    const dispatch = useAppDispatch()
+    const loading = useAppSelector((state) => state.drugDoses.loading)
+    const [imageUrl, setImageUrl] = useState(mediaUrl(drugDose.image_url) || DEFAULT_IMAGE_URL)
 
     return (
         <Card className="drug-tile">
@@ -29,6 +34,16 @@ const DrugDoseTile = ({ drugDose }: DrugDoseTileProps) => {
                     <span className="like-heart">&#9829;</span>
                     {drugDose.likes_count}
                 </p>
+                {drugDose.is_creator === 1 && (
+                    <Button
+                        className="drug-tile-delete"
+                        variant="link"
+                        disabled={loading}
+                        onClick={() => dispatch(deleteDrugDose(Number(drugDose.id)))}
+                    >
+                        Удалить
+                    </Button>
+                )}
             </Card.Body>
         </Card>
     )

@@ -1,5 +1,11 @@
+import axios from 'axios'
 import { Nav } from 'react-bootstrap'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { applyToken, TOKEN_KEY } from '../api'
+import { signOut } from '../slices/authSlice'
+import { clearDraft } from '../slices/drugDoseDraftSlice'
+import { getDrugDosesList, resetFilter } from '../slices/drugDosesSlice'
+import { useAppDispatch, useAppSelector } from '../store'
 
 const FeedIcon = () => (
     <svg className="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -31,28 +37,73 @@ const LoginIcon = () => (
     </svg>
 )
 
-const TabBar = () => (
-    <Nav as="nav" className="tabbar">
-        <NavLink to="/drug_doses/feed" className={({ isActive }) => (isActive ? 'tab tab-active' : 'tab')}>
-            <FeedIcon />
-            <span className="tab-label">Лента</span>
-        </NavLink>
+const TabBar = () => {
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
-        <span className="tab tab-disabled" aria-disabled="true">
-            <DraftIcon />
-            <span className="tab-label">Добавление</span>
-        </span>
+    const handleSignOut = async () => {
+        const token = localStorage.getItem(TOKEN_KEY)
 
-        <NavLink to="/drug_doses" end className={({ isActive }) => (isActive ? 'tab tab-active' : 'tab')}>
-            <TilesIcon />
-            <span className="tab-label">Плитка</span>
-        </NavLink>
+        try {
+            await axios.post('/api/users/logout', null, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+        } catch {
+            localStorage.removeItem(TOKEN_KEY)
+        }
 
-        <span className="tab tab-disabled" aria-disabled="true">
-            <LoginIcon />
-            <span className="tab-label">Вход</span>
-        </span>
-    </Nav>
-)
+        localStorage.removeItem(TOKEN_KEY)
+        localStorage.removeItem('pediatric_dose_login')
+        localStorage.removeItem('pediatric_dose_moderator')
+        applyToken(null)
+
+        dispatch(signOut())
+        dispatch(clearDraft())
+        dispatch(resetFilter())
+        dispatch(getDrugDosesList())
+        navigate('/drug_doses')
+    }
+
+    const tabClass = ({ isActive }: { isActive: boolean }) => (isActive ? 'tab tab-active' : 'tab')
+
+    return (
+        <Nav as="nav" className="tabbar">
+            <NavLink to="/drug_doses/feed" className={tabClass}>
+                <FeedIcon />
+                <span className="tab-label">Лента</span>
+            </NavLink>
+
+            {isAuthenticated ? (
+                <NavLink to="/drug_doses/draft" className={tabClass}>
+                    <DraftIcon />
+                    <span className="tab-label">Добавление</span>
+                </NavLink>
+            ) : (
+                <span className="tab tab-disabled" aria-disabled="true">
+                    <DraftIcon />
+                    <span className="tab-label">Добавление</span>
+                </span>
+            )}
+
+            <NavLink to="/drug_doses" end className={tabClass}>
+                <TilesIcon />
+                <span className="tab-label">Плитка</span>
+            </NavLink>
+
+            {isAuthenticated ? (
+                <button type="button" className="tab tab-button" onClick={handleSignOut}>
+                    <LoginIcon />
+                    <span className="tab-label">Выход</span>
+                </button>
+            ) : (
+                <NavLink to="/users/login" className={tabClass}>
+                    <LoginIcon />
+                    <span className="tab-label">Вход</span>
+                </NavLink>
+            )}
+        </Nav>
+    )
+}
 
 export default TabBar
