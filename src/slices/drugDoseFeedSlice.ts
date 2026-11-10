@@ -19,7 +19,7 @@ export const getDrugDoseFeed = createAsyncThunk(
         const { auth } = getState() as { auth: { isAuthenticated: boolean } }
 
         try {
-            const response = await api.drugDoses.feedDetail(drugDoseId, {})
+            const response = await api.drugDoses.drugDoseFeedDetail(drugDoseId, {})
 
             return response.data
         } catch {
@@ -32,7 +32,7 @@ export const likeDrugDose = createAsyncThunk(
     'drugDoseFeed/likeDrugDose',
     async ({ drugDoseId, value }: { drugDoseId: number; value: 0 | 1 }, { dispatch, rejectWithValue }) => {
         try {
-            await api.drugDoses.likeCreate(drugDoseId, { value })
+            await api.drugDoses.drugDoseLikeCreate(drugDoseId, { value })
             dispatch(getDrugDoseFeed(drugDoseId))
 
             return value

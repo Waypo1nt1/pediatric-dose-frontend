@@ -29,7 +29,7 @@ export const getDrugDoseDraft = createAsyncThunk(
     'drugDoseDraft/getDrugDoseDraft',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.drugDoses.draftList()
+            const response = await api.drugDoses.drugDoseDraftDetail()
 
             return response.data
         } catch {
@@ -65,7 +65,7 @@ export const publishDrugDose = createAsyncThunk(
         const { drugDoseDraft } = getState() as { drugDoseDraft: DrugDoseDraftState }
 
         try {
-            const response = await api.drugDoses.publishUpdate({
+            const response = await api.drugDoses.drugDosePublishUpdate({
                 short_info: drugDoseDraft.shortInfo,
                 recommended_adult_dose_mg: Number(drugDoseDraft.recommendedAdultDoseMg),
                 max_daily_dose_mg: Number(drugDoseDraft.maxDailyDoseMg),

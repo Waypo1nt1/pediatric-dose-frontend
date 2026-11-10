@@ -324,12 +324,12 @@ export class Api<
      * @description Черновик текущего пользователя
      *
      * @tags Услуги
-     * @name DraftList
+     * @name DrugDoseDraftDetail
      * @summary Черновик дозы препарата
      * @request GET:/drug_doses/draft
      * @secure
      */
-    draftList: (params: RequestParams = {}) =>
+    drugDoseDraftDetail: (params: RequestParams = {}) =>
       this.request<SchemesDrugDose, void>({
         path: `/drug_doses/draft`,
         method: "GET",
@@ -342,11 +342,11 @@ export class Api<
      * @description Без ид отдаёт первую опубликованную дозу, с ид - указанную, с next=true - следующую за ней. Поле is_liked показывает, лайкнул ли её текущий пользователь. Доступно без авторизации
      *
      * @tags Услуги
-     * @name FeedDetail
+     * @name DrugDoseFeedDetail
      * @summary Лента доз препаратов
      * @request GET:/drug_doses/feed/{drug_dose_id}
      */
-    feedDetail: (
+    drugDoseFeedDetail: (
       drugDoseId?: number,
       query?: {
         /** Получить следующую дозу препарата */
@@ -366,12 +366,12 @@ export class Api<
      * @description Заполняет описание и дозы и переводит черновик текущего пользователя в опубликованные
      *
      * @tags Услуги
-     * @name PublishUpdate
+     * @name DrugDosePublishUpdate
      * @summary Публикация дозы препарата
      * @request PUT:/drug_doses/publish
      * @secure
      */
-    publishUpdate: (
+    drugDosePublishUpdate: (
       request: SchemesPublishDrugDoseRequest,
       params: RequestParams = {},
     ) =>
@@ -406,12 +406,12 @@ export class Api<
      * @description Значение 1 ставит лайк, 0 убирает
      *
      * @tags Услуги
-     * @name LikeCreate
+     * @name DrugDoseLikeCreate
      * @summary Лайк дозы препарата
      * @request POST:/drug_doses/{drug_dose_id}/like
      * @secure
      */
-    likeCreate: (
+    drugDoseLikeCreate: (
       drugDoseId: number,
       request: SchemesLikeDrugDoseRequest,
       params: RequestParams = {},
