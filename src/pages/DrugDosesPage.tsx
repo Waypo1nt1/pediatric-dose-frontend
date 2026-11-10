@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../store'
 
 const DrugDosesPage = () => {
     const dispatch = useAppDispatch()
-    const { drugDoses, loading, isMock } = useAppSelector((state) => state.drugDoses)
+    const { drugDoses, loading } = useAppSelector((state) => state.drugDoses)
 
     useEffect(() => {
         document.title = 'Плитка доз препаратов'
@@ -21,8 +21,6 @@ const DrugDosesPage = () => {
             </header>
 
             <DoseFilter />
-
-            {isMock && <p className="draft-message">Веб-сервис недоступен, показаны mock-объекты</p>}
 
             {!loading && drugDoses.length > 0 && (
                 <div className="drug-grid">

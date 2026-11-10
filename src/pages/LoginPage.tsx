@@ -29,7 +29,7 @@ const LoginPage = () => {
             localStorage.setItem(TOKEN_KEY, response.data.access_token)
             applyToken(response.data.access_token)
 
-            dispatch(signIn({ login: response.data.login, isModerator: Boolean(response.data.is_moderator) }))
+            dispatch(signIn({ login: response.data.login }))
             dispatch(resetFilter())
             navigate('/drug_doses')
         } catch {

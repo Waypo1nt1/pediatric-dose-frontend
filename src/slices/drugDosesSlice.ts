@@ -9,7 +9,6 @@ interface DrugDosesState {
     maxAdultDose: number
     drugDoses: SchemesDrugDose[]
     loading: boolean
-    isMock: boolean
 }
 
 const initialState: DrugDosesState = {
@@ -17,7 +16,6 @@ const initialState: DrugDosesState = {
     maxAdultDose: ADULT_DOSE_MAX,
     drugDoses: [],
     loading: false,
-    isMock: false,
 }
 
 export const getDrugDosesList = createAsyncThunk(
@@ -77,19 +75,16 @@ const drugDosesSlice = createSlice({
             })
             .addCase(getDrugDosesList.fulfilled, (state, action) => {
                 state.loading = false
-                state.isMock = false
                 state.drugDoses = action.payload ?? []
             })
             .addCase(getDrugDosesList.rejected, (state, action) => {
                 state.loading = false
 
                 if (action.payload !== 'guest') {
-                    state.isMock = false
                     state.drugDoses = []
                     return
                 }
 
-                state.isMock = true
                 state.drugDoses = DRUG_DOSES_MOCK.filter(
                     (drugDose) =>
                         drugDose.recommended_adult_dose_mg >= state.minAdultDose &&

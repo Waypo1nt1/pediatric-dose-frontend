@@ -4,7 +4,6 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 interface AuthState {
     isAuthenticated: boolean
     login: string
-    isModerator: boolean
     loading: boolean
     error: string
 }
@@ -12,7 +11,6 @@ interface AuthState {
 const initialState: AuthState = {
     isAuthenticated: false,
     login: '',
-    isModerator: false,
     loading: false,
     error: '',
 }
@@ -31,17 +29,15 @@ const authSlice = createSlice({
             state.loading = false
             state.error = action.payload
         },
-        signIn(state, action: PayloadAction<{ login: string; isModerator: boolean }>) {
+        signIn(state, action: PayloadAction<{ login: string }>) {
             state.isAuthenticated = true
             state.login = action.payload.login
-            state.isModerator = action.payload.isModerator
             state.loading = false
             state.error = ''
         },
         signOut(state) {
             state.isAuthenticated = false
             state.login = ''
-            state.isModerator = false
             state.loading = false
             state.error = ''
         },

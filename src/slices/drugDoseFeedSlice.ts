@@ -6,13 +6,11 @@ import { DRUG_DOSES_MOCK } from '../modules/mock'
 interface DrugDoseFeedState {
     drugDose: SchemesDrugDoseFeed | null
     loading: boolean
-    isMock: boolean
 }
 
 const initialState: DrugDoseFeedState = {
     drugDose: null,
     loading: false,
-    isMock: false,
 }
 
 export const getDrugDoseFeed = createAsyncThunk(
@@ -55,19 +53,16 @@ const drugDoseFeedSlice = createSlice({
             })
             .addCase(getDrugDoseFeed.fulfilled, (state, action) => {
                 state.loading = false
-                state.isMock = false
                 state.drugDose = action.payload ?? null
             })
             .addCase(getDrugDoseFeed.rejected, (state, action) => {
                 state.loading = false
 
                 if (typeof action.payload !== 'number') {
-                    state.isMock = false
                     state.drugDose = null
                     return
                 }
 
-                state.isMock = true
                 state.drugDose =
                     DRUG_DOSES_MOCK.find((item) => item.id === action.payload) ?? DRUG_DOSES_MOCK[0]
             })
