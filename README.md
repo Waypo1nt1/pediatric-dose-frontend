@@ -3,7 +3,7 @@
 Одностраничное приложение на React 19, TypeScript и Vite 8. Компоненты интерфейса – React-Bootstrap,
 маршрутизация – React Router, состояние – Redux Toolkit, запросы – axios с кодогенерацией из Swagger.
 
-Запуск: `npm install`, затем `npm run dev`. Приложение открывается по адресу http://localhost:5173.
+Запуск: `npm install`, затем `npm run dev`. Приложение открывается по адресу http://localhost:3000.
 Кодогенерация клиента веб-сервиса: `npm run generate-api` при запущенном бэкенде.
 
 Данные берутся из веб-сервиса `http://localhost:8080` через прокси Vite (`/api` и `/drug-dose-media`),
