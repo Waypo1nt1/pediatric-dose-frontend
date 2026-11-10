@@ -98,24 +98,16 @@ const DrugDoseDraftPage = () => {
             {!draft && (
                 <Form className="draft-form" onSubmit={handleCreate}>
                     <section className="draft-section">
-                        <h2 className="draft-section-title">Новая доза препарата</h2>
-
+                        <h2 className="draft-section-title">Изображение дозы препарата</h2>
                         <div className="draft-media">
                             <img
                                 className="draft-preview-image"
                                 src={imagePreview || DEFAULT_IMAGE_URL}
                                 alt={drugDoseName}
                             />
-                            <video
-                                key={videoPreview}
-                                className="draft-preview-video"
-                                src={videoPreview || DEFAULT_VIDEO_URL}
-                                poster={imagePreview || DEFAULT_IMAGE_URL}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                            />
+                            <p className="draft-media-note">
+                                {image ? 'Выбранное изображение' : 'Изображение по умолчанию'}
+                            </p>
                         </div>
 
                         <Form.Label className="draft-label" htmlFor="image_file">Файл изображения</Form.Label>
@@ -130,6 +122,24 @@ const DrugDoseDraftPage = () => {
                                 setImage((event.target as HTMLInputElement).files?.[0] ?? null)
                             }
                         />
+                    </section>
+
+                    <section className="draft-section">
+                        <h2 className="draft-section-title">Видео дозы препарата</h2>
+                        <div className="draft-media">
+                            <video
+                                key={videoPreview}
+                                className="draft-preview-video"
+                                src={videoPreview || DEFAULT_VIDEO_URL}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            />
+                            <p className="draft-media-note">
+                                {video ? 'Выбранное видео' : 'Видео по умолчанию'}
+                            </p>
+                        </div>
 
                         <Form.Label className="draft-label" htmlFor="video_file">Файл видео</Form.Label>
                         <Form.Control
@@ -146,48 +156,67 @@ const DrugDoseDraftPage = () => {
                     </section>
 
                     <section className="draft-section">
-                        <h2 className="draft-section-title">Описание дозы препарата</h2>
-
+                        <h2 className="draft-section-title">Наименование дозы препарата</h2>
                         <Form.Label className="draft-label" htmlFor="drug_dose_name">Наименование</Form.Label>
                         <Form.Control
                             className="draft-input"
                             id="drug_dose_name"
                             type="text"
+                            maxLength={100}
                             value={drugDoseName}
                             onChange={(event) => dispatch(setDrugDoseName(event.target.value))}
                             required
                         />
-
                     </section>
 
-                    <Button className="dose-filter-button" type="submit" disabled={loading}>Далее</Button>
+                    <Button className="draft-button" type="submit" disabled={loading}>Далее</Button>
                 </Form>
             )}
 
             {draft && (
                 <Form className="draft-form" onSubmit={handlePublish}>
                     <section className="draft-section">
-                        <h2 className="draft-section-title">{draft.drug_dose_name}</h2>
+                        <h2 className="draft-section-title">Изображение дозы препарата</h2>
                         <div className="draft-media">
                             <img
                                 className="draft-preview-image"
                                 src={mediaUrl(draft.image_url) || DEFAULT_IMAGE_URL}
                                 alt={draft.drug_dose_name}
                             />
+                            <p className="draft-media-note">
+                                {draft.image_url ? 'Изображение из хранилища' : 'Изображение по умолчанию'}
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="draft-section">
+                        <h2 className="draft-section-title">Видео дозы препарата</h2>
+                        <div className="draft-media">
                             <video
                                 className="draft-preview-video"
                                 src={mediaUrl(draft.video_url) || DEFAULT_VIDEO_URL}
-                                poster={mediaUrl(draft.image_url) || DEFAULT_IMAGE_URL}
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
                             />
+                            <p className="draft-media-note">
+                                {draft.video_url ? 'Видео из хранилища' : 'Видео по умолчанию'}
+                            </p>
                         </div>
                     </section>
 
                     <section className="draft-section">
                         <h2 className="draft-section-title">Описание дозы препарата</h2>
+                        <Form.Label className="draft-label" htmlFor="draft_drug_dose_name">Наименование</Form.Label>
+                        <Form.Control
+                            className="draft-input"
+                            id="draft_drug_dose_name"
+                            type="text"
+                            value={draft.drug_dose_name ?? ''}
+                            readOnly
+                        />
+
                         <Form.Label className="draft-label" htmlFor="short_info">Краткое описание</Form.Label>
                         <Form.Control
                             className="draft-textarea"
@@ -228,7 +257,7 @@ const DrugDoseDraftPage = () => {
                         </div>
                     </section>
 
-                    <Button className="dose-filter-button" type="submit" disabled={loading}>Опубликовать</Button>
+                    <Button className="draft-button" type="submit" disabled={loading}>Опубликовать</Button>
                 </Form>
             )}
         </div>
