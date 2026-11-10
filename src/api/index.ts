@@ -18,5 +18,3 @@ export const applyToken = (token: string | null) => {
 
     delete api.instance.defaults.headers.common.Authorization
 }
-
-applyToken(localStorage.getItem(TOKEN_KEY))

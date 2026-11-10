@@ -10,9 +10,9 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    isAuthenticated: Boolean(localStorage.getItem('pediatric_dose_token')),
-    login: localStorage.getItem('pediatric_dose_login') ?? '',
-    isModerator: localStorage.getItem('pediatric_dose_moderator') === '1',
+    isAuthenticated: false,
+    login: '',
+    isModerator: false,
     loading: false,
     error: '',
 }

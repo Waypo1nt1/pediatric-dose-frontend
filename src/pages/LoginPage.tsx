@@ -27,8 +27,6 @@ const LoginPage = () => {
             const response = await axios.post('/api/users/login', { login, password })
 
             localStorage.setItem(TOKEN_KEY, response.data.access_token)
-            localStorage.setItem('pediatric_dose_login', response.data.login)
-            localStorage.setItem('pediatric_dose_moderator', response.data.is_moderator ? '1' : '0')
             applyToken(response.data.access_token)
 
             dispatch(signIn({ login: response.data.login, isModerator: Boolean(response.data.is_moderator) }))

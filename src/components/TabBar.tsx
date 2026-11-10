@@ -54,8 +54,6 @@ const TabBar = () => {
         }
 
         localStorage.removeItem(TOKEN_KEY)
-        localStorage.removeItem('pediatric_dose_login')
-        localStorage.removeItem('pediatric_dose_moderator')
         applyToken(null)
 
         dispatch(signOut())
