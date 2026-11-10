@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { Navigate } from 'react-router-dom'
 import { mediaUrl } from '../modules/media'
@@ -25,9 +25,30 @@ const DrugDoseDraftPage = () => {
     const imageInput = useRef<HTMLInputElement>(null)
     const videoInput = useRef<HTMLInputElement>(null)
 
+    const imagePreview = useMemo(() => (image ? URL.createObjectURL(image) : ''), [image])
+    const videoPreview = useMemo(() => (video ? URL.createObjectURL(video) : ''), [video])
+
     useEffect(() => {
         document.title = 'Добавление дозы препарата'
     }, [])
+
+    useEffect(
+        () => () => {
+            if (imagePreview) {
+                URL.revokeObjectURL(imagePreview)
+            }
+        },
+        [imagePreview],
+    )
+
+    useEffect(
+        () => () => {
+            if (videoPreview) {
+                URL.revokeObjectURL(videoPreview)
+            }
+        },
+        [videoPreview],
+    )
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -78,6 +99,24 @@ const DrugDoseDraftPage = () => {
                 <Form className="draft-form" onSubmit={handleCreate}>
                     <section className="draft-section">
                         <h2 className="draft-section-title">Новая доза препарата</h2>
+
+                        <div className="draft-media">
+                            <img
+                                className="draft-preview-image"
+                                src={imagePreview || DEFAULT_IMAGE_URL}
+                                alt={drugDoseName}
+                            />
+                            <video
+                                key={videoPreview}
+                                className="draft-preview-video"
+                                src={videoPreview || DEFAULT_VIDEO_URL}
+                                poster={imagePreview || DEFAULT_IMAGE_URL}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            />
+                        </div>
 
                         <Form.Label className="draft-label" htmlFor="drug_dose_name">Наименование</Form.Label>
                         <Form.Control
