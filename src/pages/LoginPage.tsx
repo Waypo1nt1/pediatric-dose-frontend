@@ -53,7 +53,7 @@ const LoginPage = () => {
         <div className="screen">
             <header className="screen-header">
                 <h1 className="screen-title">Вход</h1>
-                <p className="screen-subtitle">Врачи и фармакологи ведут каталог доз препаратов</p>
+                <p className="screen-subtitle">Врачи ведут каталог доз препаратов</p>
             </header>
 
             <Form className="draft-form" onSubmit={handleSubmit}>
