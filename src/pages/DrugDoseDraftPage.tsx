@@ -118,16 +118,6 @@ const DrugDoseDraftPage = () => {
                             />
                         </div>
 
-                        <Form.Label className="draft-label" htmlFor="drug_dose_name">Наименование</Form.Label>
-                        <Form.Control
-                            className="draft-input"
-                            id="drug_dose_name"
-                            type="text"
-                            value={drugDoseName}
-                            onChange={(event) => dispatch(setDrugDoseName(event.target.value))}
-                            required
-                        />
-
                         <Form.Label className="draft-label" htmlFor="image_file">Файл изображения</Form.Label>
                         <Form.Control
                             className="draft-file"
@@ -153,6 +143,21 @@ const DrugDoseDraftPage = () => {
                                 setVideo((event.target as HTMLInputElement).files?.[0] ?? null)
                             }
                         />
+                    </section>
+
+                    <section className="draft-section">
+                        <h2 className="draft-section-title">Описание дозы препарата</h2>
+
+                        <Form.Label className="draft-label" htmlFor="drug_dose_name">Наименование</Form.Label>
+                        <Form.Control
+                            className="draft-input"
+                            id="drug_dose_name"
+                            type="text"
+                            value={drugDoseName}
+                            onChange={(event) => dispatch(setDrugDoseName(event.target.value))}
+                            required
+                        />
+
                     </section>
 
                     <Button className="dose-filter-button" type="submit" disabled={loading}>Далее</Button>
